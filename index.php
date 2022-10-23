@@ -15,6 +15,11 @@ if(isset($_GET['clear'])){
     unset($_SESSION['tasks']);
 }
 
+if (isset($_GET['key'])){
+    array_slice($_SESSION['tasks'], $_GET['key'], 1);
+    unset($_GET['key']);
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -59,7 +64,18 @@ rel="stylesheet">
                 echo '<ul>';
                 
                 foreach($_SESSION['tasks'] as $key => $task){
-                    echo "<li>$task</li>";
+                    echo "<li>
+                    <span>$task</span>
+                    <button type='button' class='btn-limpar' onclick='apagar$key()'>Apagar</button>
+                    <script>
+                    function apagar$key(){
+                        if(confirm('Deseja apagar essa tarefa?')){
+                            window.location = 'http://localhost:3000/?key=$key';
+                        }
+                        return false;
+                    }
+                    </script>
+                    </li>";
                 }
 
                 echo'</ul>';
@@ -69,7 +85,7 @@ rel="stylesheet">
 
             <form action="" method="get">
                 <input type="hidden" name="clear" value="clear">
-                <button type="submit">Limpar</button>
+                <button class="btn-limpar" type="submit">Apagar Tarefas</button>
             </form>
         </section>
         <footer class="footer">
@@ -77,6 +93,6 @@ rel="stylesheet">
         </footer>
     </main>
 
-    <script src="./assets/js/time.js"></script>
+    <script src="./assets/js/scripts.js"></script>
 </body>
 </html>
